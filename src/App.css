@@ -18,3 +18,9 @@ body{
     color: white;
     padding: 8px 0;
 }
+
+.HeaderWrapper .top-stripe p{
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
