@@ -2,10 +2,27 @@ import Button from '@mui/material/Button';
 import { IoMenu } from "react-icons/io5";
 import { FaAngleDown } from "react-icons/fa6";
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
-const Navigation=()=>{
+const Navigation = () => {
     const [isCatOpen, setIsCatOpen] = useState(false);
+    const [categories, setCategories] = useState([]);
+
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const response = await fetch('http://localhost:4000/api/category'); 
+                const data = await response.json();
+                
+                setCategories(data); 
+
+            } catch (error) {
+                console.error("Error fetching categories:", error);
+            }
+        };
+
+        fetchCategories();
+    }, []);
 
     return(
         <nav>
@@ -19,16 +36,13 @@ const Navigation=()=>{
                             </button>
                             <div className={`sidebarNav shadow ${isCatOpen ? 'open' : ''}`}>
                                 <ul>
-                                    <li><Link to="/category/fruits"><button>Fruits & Vegetables</button></Link></li>
-                                    <li><Link to="/category/bakery"><button>Bakery & Biscuits</button></Link></li>
-                                    <li><Link to="/category/meat"><button>Meat & Seafood</button></Link></li>
-                                    <li><Link to="/category/beverages"><button>Beverages</button></Link></li>
-                                    <li><Link to="/category/snacks"><button>Snacks & Branded Foods</button></Link></li>
-                                    <li><Link to="/category/beauty"><button>Beauty & Health</button></Link></li>
-                                    <li><Link to="/category/home"><button>Home & Cleaning</button></Link></li>
-                                    <li><Link to="/category/dairy"><button>Dairy & Eggs</button></Link></li>
-                                    <li><Link to="/category/pet"><button>Pet Care</button></Link></li>
-                                    <li><Link to="/category/baby"><button>Baby Care</button></Link></li>
+                                    {categories.length > 0 && categories.map((cat, index) => (
+                                        <li key={index}>
+                                            <Link to={`/category/${cat.name.toLowerCase()}`}>
+                                                <button>{cat.name}</button>
+                                            </Link>
+                                        </li>
+                                    ))}
                                 </ul>
                             </div>
                         </div>
