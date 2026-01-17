@@ -77,12 +77,8 @@ const Profile = () => {
 
                     <div className="profile-details">
                         <div className="profile-detail-item">
-                            <label>First Name</label>
+                            <label>Your Name</label>
                             <p>{userData?.firstName || 'N/A'}</p>
-                        </div>
-                        <div className="profile-detail-item">
-                            <label>Last Name</label>
-                            <p>{userData?.lastName || 'N/A'}</p>
                         </div>
                         <div className="profile-detail-item">
                             <label>Email Address</label>
