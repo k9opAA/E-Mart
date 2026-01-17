@@ -4,6 +4,13 @@ const Upload = () => {
 
     const [categories, setCategories] = useState([]);
 
+    useEffect(() => {
+        fetch('http://localhost:4000/api/category')
+            .then(res => res.json())
+            .then(data => setCategories(data))
+            .catch(err => console.log("Error fetching categories:", err));
+    }, []);
+
     const [productFormFields, setProductFormFields] = useState({
         name: "",
         description: "",
@@ -14,13 +21,6 @@ const Upload = () => {
         image: "",
         isFeatured: "No"
     });
-
-    useEffect(() => {
-        fetch('http://localhost:4000/api/category')
-            .then(res => res.json())
-            .then(data => setCategories(data))
-            .catch(err => console.log("Error fetching categories:", err));
-    }, []);
 
     const changeProductInput = (e) => {
         setProductFormFields({
