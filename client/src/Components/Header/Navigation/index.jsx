@@ -38,7 +38,7 @@ const Navigation = () => {
                                 <ul>
                                     {categories.length > 0 && categories.map((cat, index) => (
                                         <li key={index}>
-                                            <Link to={`/category/${cat.name.toLowerCase()}`}>
+                                            <Link to={`/products?category=${cat.name}`} onClick={() => setIsCatOpen(false)}>
                                                 <button>{cat.name}</button>
                                             </Link>
                                         </li>

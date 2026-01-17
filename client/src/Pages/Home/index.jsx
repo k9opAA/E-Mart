@@ -1,8 +1,10 @@
 import HomeBanner from "../../Components/HomeBanner";
+import CustomerReviews from "../../Components/CustomerReviews";
 import banner1 from '../../assets/image/banner-01.jpg';
 import banner2 from '../../assets/image/banner-02.jpg';
 import { FaArrowRightLong } from "react-icons/fa6";
 import React, { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -12,6 +14,7 @@ import HomeCat from "../../Components/HomeCat";
 
 const Home = () => {
     const [products, setProducts] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetch("http://localhost:4000/api/products")
@@ -46,7 +49,7 @@ const Home = () => {
                                     <h3 className="mb-0 hd">BEST SELLERS</h3>
                                     <p className="text-light text-sml mb-0">Do not miss the current offers until the end of the month.</p>
                                 </div>
-                                <button className="viewAllBtn ml-auto">View All <FaArrowRightLong /></button>
+                                <button className="viewAllBtn ml-auto" onClick={() => navigate('/products')}>View All <FaArrowRightLong /></button>
                             </div>
 
                             <div className="product_row w-100 mt-4">
@@ -71,6 +74,8 @@ const Home = () => {
                     </div>
                 </div>
             </section>
+
+            <CustomerReviews />
         </>
     )
 }

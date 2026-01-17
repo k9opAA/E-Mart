@@ -1,0 +1,239 @@
+.products-page {
+    min-height: 100vh;
+    background: #f5f7fa;
+}
+
+.products-hero {
+    background: linear-gradient(135deg, #2bbef9 0%, #1aa9e0 100%);
+    color: white;
+    padding: 60px 0;
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.products-hero h1 {
+    font-size: 42px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.products-hero p {
+    font-size: 18px;
+    opacity: 0.95;
+    margin: 0;
+}
+
+.products-container {
+    padding: 0 15px 80px;
+}
+
+.products-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    gap: 20px;
+}
+
+.loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #2bbef9;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.products-loading p {
+    color: #666;
+    font-size: 16px;
+}
+
+/* Category Filters */
+.category-filters {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 30px;
+    justify-content: center;
+    padding: 20px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.category-btn {
+    padding: 10px 24px;
+    background: #f5f7fa;
+    border: 2px solid transparent;
+    border-radius: 25px;
+    color: #333;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.category-btn:hover {
+    background: #e8f7fd;
+    color: #2bbef9;
+}
+
+.category-btn.active {
+    background: linear-gradient(135deg, #2bbef9 0%, #1aa9e0 100%);
+    color: white;
+    border-color: #2bbef9;
+    box-shadow: 0 4px 12px rgba(43, 190, 249, 0.3);
+}
+
+/* Products Count */
+.products-count {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.products-count p {
+    font-size: 15px;
+    color: #666;
+    margin: 0;
+}
+
+.products-count strong {
+    color: #2bbef9;
+    font-weight: 700;
+}
+
+/* Products Grid */
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.product-grid-item {
+    width: 100%;
+}
+
+.product-grid-item .productItem {
+    height: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.product-grid-item .productItem:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+/* No Products */
+.no-products {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    text-align: center;
+    gap: 20px;
+    padding: 60px 20px;
+}
+
+.no-products svg {
+    color: #ccc;
+    margin-bottom: 10px;
+}
+
+.no-products h2 {
+    font-size: 28px;
+    color: #333;
+    margin: 0;
+}
+
+.no-products p {
+    color: #666;
+    font-size: 16px;
+    margin: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .products-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 992px) {
+    .products-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .category-filters {
+        padding: 15px;
+    }
+
+    .category-btn {
+        padding: 8px 20px;
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 768px) {
+    .products-hero {
+        padding: 40px 0;
+    }
+
+    .products-hero h1 {
+        font-size: 32px;
+    }
+
+    .products-hero p {
+        font-size: 16px;
+    }
+
+    .products-container {
+        padding: 0 15px 40px;
+    }
+
+    .products-grid {
+        gap: 15px;
+    }
+
+    .category-filters {
+        gap: 8px;
+        padding: 12px;
+    }
+
+    .category-btn {
+        padding: 8px 16px;
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 576px) {
+    .products-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .products-hero h1 {
+        font-size: 28px;
+    }
+
+    .category-filters {
+        justify-content: flex-start;
+    }
+
+    .no-products {
+        padding: 40px 20px;
+    }
+
+    .no-products h2 {
+        font-size: 24px;
+    }
+}
