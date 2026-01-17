@@ -3,6 +3,7 @@ import Dashboard from './pages/dashboard'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Upload from './pages/upload'
 import EditProduct from './pages/edit'
+import Orders from './pages/orders'
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
         <Route path="/" element={<Dashboard /> } />
         <Route path="/upload" element={<Upload /> } />
         <Route path="/product/edit/:id" element={<EditProduct /> } />
+        <Route path="/orders" element={<Orders /> } />
       </Routes>
     </BrowserRouter>
   )

@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Populate E-mart Database</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        button {
+            background: #4A90E2;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        button:hover {
+            background: #357ABD;
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        #log {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 5px;
+            max-height: 400px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        .success { color: green; }
+        .error { color: red; }
+        .info { color: blue; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🛒 E-mart Database Populator</h1>
+        <p>Click the buttons below to populate your database with sample data:</p>
+        
+        <button id="categoriesBtn" onclick="populateCategories()">Add 6 Categories</button>
+        <button id="productsBtn" onclick="populateProducts()">Add 20 Products</button>
+        <button id="bothBtn" onclick="populateBoth()">Add All Data</button>
+        
+        <div id="log"></div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:4000/api';
+        
+        const categories = [
+            { name: "Fashion", images: ["https://images.unsplash.com/photo-1445205170230-053b83016050?w=400"], color: "#FF6B9D" },
+            { name: "Electronics", images: ["https://images.unsplash.com/photo-1498049794561-7780e7231661?w=400"], color: "#4A90E2" },
+            { name: "Footwear", images: ["https://images.unsplash.com/photo-1460353581641-37baddab0fa2?w=400"], color: "#F5A623" },
+            { name: "Watch", images: ["https://images.unsplash.com/photo-1524805444758-089113d48a6d?w=400"], color: "#7ED321" },
+            { name: "Mobile", images: ["https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400"], color: "#BD10E0" },
+            { name: "Laptop", images: ["https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=400"], color: "#50E3C2" }
+        ];
+
+        const products = [
+            { name: "Men's Cotton T-Shirt", description: "Comfortable cotton t-shirt for everyday wear", category: "Fashion", price: 29.99, InStock: 150, brand: "StyleCo", images: ["https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400"], isFeatured: true },
+            { name: "Women's Denim Jacket", description: "Classic denim jacket with modern fit", category: "Fashion", price: 79.99, InStock: 85, brand: "TrendWear", images: ["https://images.unsplash.com/photo-1551028719-00167b16eac5?w=400"], isFeatured: false },
+            { name: "Casual Summer Dress", description: "Light and breezy summer dress", category: "Fashion", price: 49.99, InStock: 120, brand: "SummerVibes", images: ["https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=400"], isFeatured: true },
+            { name: "Wireless Bluetooth Headphones", description: "Premium noise-cancelling headphones", category: "Electronics", price: 149.99, InStock: 95, brand: "SoundMax", images: ["https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400"], isFeatured: true },
+            { name: "4K Smart TV 55 inch", description: "Ultra HD smart television with streaming apps", category: "Electronics", price: 599.99, InStock: 45, brand: "VisionTech", images: ["https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=400"], isFeatured: false },
+            { name: "Portable Power Bank", description: "20000mAh fast charging power bank", category: "Electronics", price: 39.99, InStock: 200, brand: "ChargePro", images: ["https://images.unsplash.com/photo-1609091839311-d5365f9ff1c5?w=400"], isFeatured: false },
+            { name: "Gaming Keyboard RGB", description: "Mechanical gaming keyboard with RGB lighting", category: "Electronics", price: 89.99, InStock: 75, brand: "GameGear", images: ["https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=400"], isFeatured: true },
+            { name: "Running Sneakers", description: "Lightweight running shoes with cushioning", category: "Footwear", price: 79.99, InStock: 130, brand: "SpeedFit", images: ["https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400"], isFeatured: true },
+            { name: "Leather Formal Shoes", description: "Classic leather formal shoes for men", category: "Footwear", price: 119.99, InStock: 65, brand: "ClassicStep", images: ["https://images.unsplash.com/photo-1533867617858-e7b97e060509?w=400"], isFeatured: false },
+            { name: "Women's High Heels", description: "Elegant high heels for special occasions", category: "Footwear", price: 89.99, InStock: 55, brand: "Elegance", images: ["https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=400"], isFeatured: false },
+            { name: "Sport Sandals", description: "Comfortable outdoor sport sandals", category: "Footwear", price: 45.99, InStock: 100, brand: "OutdoorPro", images: ["https://images.unsplash.com/photo-1603487742131-4160ec999306?w=400"], isFeatured: false },
+            { name: "Luxury Analog Watch", description: "Premium stainless steel analog watch", category: "Watch", price: 299.99, InStock: 40, brand: "TimeLux", images: ["https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400"], isFeatured: true },
+            { name: "Smart Fitness Watch", description: "Fitness tracking smartwatch with heart rate monitor", category: "Watch", price: 199.99, InStock: 80, brand: "FitTime", images: ["https://images.unsplash.com/photo-1579586337278-3befd40fd17a?w=400"], isFeatured: true },
+            { name: "Casual Digital Watch", description: "Sporty digital watch with multiple features", category: "Watch", price: 59.99, InStock: 110, brand: "SportTime", images: ["https://images.unsplash.com/photo-1434493789847-2f02dc6ca35d?w=400"], isFeatured: false },
+            { name: "Flagship Smartphone 5G", description: "Latest 5G smartphone with triple camera", category: "Mobile", price: 899.99, InStock: 60, brand: "TechPhone", images: ["https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400"], isFeatured: true },
+            { name: "Budget Android Phone", description: "Affordable smartphone with great features", category: "Mobile", price: 299.99, InStock: 140, brand: "ValuePhone", images: ["https://images.unsplash.com/photo-1585060544812-6b45742d762f?w=400"], isFeatured: false },
+            { name: "Premium iPhone", description: "Latest iPhone with A-series chip", category: "Mobile", price: 1099.99, InStock: 50, brand: "Apple", images: ["https://images.unsplash.com/photo-1592286927505-4276ccf4ff9e?w=400"], isFeatured: true },
+            { name: "Gaming Laptop RTX", description: "High-performance gaming laptop with RTX graphics", category: "Laptop", price: 1499.99, InStock: 35, brand: "GameBook", images: ["https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=400"], isFeatured: true },
+            { name: "Business Ultrabook", description: "Lightweight ultrabook for professionals", category: "Laptop", price: 1199.99, InStock: 55, brand: "ProBook", images: ["https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=400"], isFeatured: false },
+            { name: "Student Budget Laptop", description: "Affordable laptop perfect for students", category: "Laptop", price: 599.99, InStock: 90, brand: "EduBook", images: ["https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=400"], isFeatured: false }
+        ];
+
+        function log(message, type = 'info') {
+            const logDiv = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            logDiv.innerHTML += `<div class="${type}">[${timestamp}] ${message}</div>`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+
+        function disableButtons(disabled) {
+            document.getElementById('categoriesBtn').disabled = disabled;
+            document.getElementById('productsBtn').disabled = disabled;
+            document.getElementById('bothBtn').disabled = disabled;
+        }
+
+        async function populateCategories() {
+            disableButtons(true);
+            document.getElementById('log').innerHTML = '';
+            log('Starting to add categories...', 'info');
+            
+            let successCount = 0;
+            let failCount = 0;
+
+            for (const category of categories) {
+                try {
+                    const response = await fetch(`${API_BASE}/category/create`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(category)
+                    });
+
+                    if (response.ok) {
+                        successCount++;
+                        log(`✓ Added category: ${category.name}`, 'success');
+                    } else {
+                        failCount++;
+                        const error = await response.text();
+                        log(`✗ Failed to add ${category.name}: ${error}`, 'error');
+                    }
+                } catch (error) {
+                    failCount++;
+                    log(`✗ Error adding ${category.name}: ${error.message}`, 'error');
+                }
+                await new Promise(resolve => setTimeout(resolve, 300));
+            }
+
+            log(`\nComplete! Success: ${successCount}, Failed: ${failCount}`, successCount === categories.length ? 'success' : 'info');
+            disableButtons(false);
+        }
+
+        async function populateProducts() {
+            disableButtons(true);
+            document.getElementById('log').innerHTML = '';
+            log('Starting to add products...', 'info');
+            
+            // First fetch all categories to get their IDs
+            log('Fetching categories to get IDs...', 'info');
+            let categoryMap = {};
+            try {
+                const response = await fetch(`${API_BASE}/category`);
+                if (response.ok) {
+                    const categoriesData = await response.json();
+                    categoriesData.forEach(cat => {
+                        categoryMap[cat.name] = cat._id;
+                    });
+                    log(`Found ${Object.keys(categoryMap).length} categories`, 'success');
+                } else {
+                    log('Failed to fetch categories. Please add categories first.', 'error');
+                    disableButtons(false);
+                    return;
+                }
+            } catch (error) {
+                log(`Error fetching categories: ${error.message}`, 'error');
+                disableButtons(false);
+                return;
+            }
+            
+            let successCount = 0;
+            let failCount = 0;
+
+            for (const product of products) {
+                try {
+                    // Replace category name with category ID
+                    const productData = {
+                        ...product,
+                        category: categoryMap[product.category]
+                    };
+
+                    if (!productData.category) {
+                        failCount++;
+                        log(`✗ ${product.name}: Category "${product.category}" not found`, 'error');
+                        continue;
+                    }
+
+                    const response = await fetch(`${API_BASE}/products/create`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(productData)
+                    });
+
+                    if (response.ok) {
+                        successCount++;
+                        log(`✓ Added product: ${product.name}`, 'success');
+                    } else {
+                        failCount++;
+                        const error = await response.text();
+                        log(`✗ Failed to add ${product.name}: ${error}`, 'error');
+                    }
+                } catch (error) {
+                    failCount++;
+                    log(`✗ Error adding ${product.name}: ${error.message}`, 'error');
+                }
+                await new Promise(resolve => setTimeout(resolve, 300));
+            }
+
+            log(`\nComplete! Success: ${successCount}, Failed: ${failCount}`, successCount === products.length ? 'success' : 'info');
+            disableButtons(false);
+        }
+
+        async function populateBoth() {
+            disableButtons(true);
+            document.getElementById('log').innerHTML = '';
+            log('Starting full database population...', 'info');
+            
+            await populateCategoriesInternal();
+            log('\n--- Now adding products ---\n', 'info');
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            await populateProductsInternal();
+            
+            disableButtons(false);
+        }
+
+        async function populateCategoriesInternal() {
+            log('Adding categories...', 'info');
+            let successCount = 0;
+
+            for (const category of categories) {
+                try {
+                    const response = await fetch(`${API_BASE}/category/create`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(category)
+                    });
+
+                    if (response.ok) {
+                        successCount++;
+                        log(`✓ ${category.name}`, 'success');
+                    }
+                } catch (error) {
+                    log(`✗ ${category.name}: ${error.message}`, 'error');
+                }
+                await new Promise(resolve => setTimeout(resolve, 300));
+            }
+        }
+
+        async function populateProductsInternal() {
+            log('Fetching categories to get IDs...', 'info');
+            
+            // First fetch all categories to get their IDs
+            let categoryMap = {};
+            try {
+                const response = await fetch(`${API_BASE}/category`);
+                if (response.ok) {
+                    const categoriesData = await response.json();
+                    categoriesData.forEach(cat => {
+                        categoryMap[cat.name] = cat._id;
+                    });
+                    log(`Found ${Object.keys(categoryMap).length} categories`, 'success');
+                } else {
+                    log('Failed to fetch categories', 'error');
+                    return;
+                }
+            } catch (error) {
+                log(`Error fetching categories: ${error.message}`, 'error');
+                return;
+            }
+
+            log('Adding products...', 'info');
+            let successCount = 0;
+
+            for (const product of products) {
+                try {
+                    // Replace category name with category ID
+                    const productData = {
+                        ...product,
+                        category: categoryMap[product.category]
+                    };
+
+                    if (!productData.category) {
+                        log(`✗ ${product.name}: Category "${product.category}" not found`, 'error');
+                        continue;
+                    }
+
+                    const response = await fetch(`${API_BASE}/products/create`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(productData)
+                    });
+
+                    if (response.ok) {
+                        successCount++;
+                        log(`✓ ${product.name}`, 'success');
+                    } else {
+                        const errorText = await response.text();
+                        log(`✗ ${product.name}: ${errorText}`, 'error');
+                    }
+                } catch (error) {
+                    log(`✗ ${product.name}: ${error.message}`, 'error');
+                }
+                await new Promise(resolve => setTimeout(resolve, 300));
+            }
+            
+            log(`\nProducts complete! Added ${successCount}/${products.length}`, successCount > 0 ? 'success' : 'error');
+        }
+    </script>
+</body>
+</html>
